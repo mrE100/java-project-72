@@ -56,5 +56,4 @@ public class UrlsController {
 
         ctx.redirect("/urls");
     };
-    }
 }
