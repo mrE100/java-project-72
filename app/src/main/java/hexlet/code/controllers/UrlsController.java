@@ -22,12 +22,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class UrlsController {
-    private static final String INPUT_URL_NULL = "inputUrl must not be NULL";
+public final class UrlsController {
+    private static final String INPUT_URL_NULL = "inputUrl must not be null";
 
-    private static Handler createUrl = ctx -> {
+    public static Handler createUrl = ctx -> {
         String inputUrl = ctx.formParam("url");
         URL parsedUrl;
+
         try {
             parsedUrl = new URL(Objects.requireNonNull(inputUrl, INPUT_URL_NULL));
         } catch (Exception e) {
@@ -56,4 +57,90 @@ public class UrlsController {
 
         ctx.redirect("/urls");
     };
+
+    public static Handler showAllAddedUrls = ctx -> {
+        String term = ctx.queryParamAsClass("term", String.class).getOrDefault("");
+        int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1) - 1;
+        int rowsPerPage = 10;
+
+        PagedList<Url> pagedUrls = new QUrl()
+                .name.icontains(term)
+                .setFirstRow(page * rowsPerPage)
+                .setMaxRows(rowsPerPage)
+                .orderBy()
+                .id.asc()
+                .findPagedList();
+        List<Url> urls = pagedUrls.getList();
+
+        int lastPage = pagedUrls.getTotalPageCount() + 1;
+        int currentPage = pagedUrls.getPageIndex() + 1;
+        List<Integer> pages = IntStream
+                .range(1, lastPage)
+                .boxed()
+                .collect(Collectors.toList());
+
+        ctx.attribute("term", term);
+        ctx.attribute("urls", urls);
+        ctx.attribute("currentPage", currentPage);
+        ctx.attribute("pages", pages);
+
+        ctx.render("urls/index.html");
+    };
+
+    public static Handler showUrl = ctx -> {
+        long id = ctx.pathParamAsClass("id", long.class).getOrDefault(null);
+        Url url = new QUrl()
+                .id.equalTo(id)
+                .findOne();
+
+        if (url == null) {
+            throw new NotFoundResponse("Url with id - " + id + " is not found in database!");
+        }
+        ctx.attribute("url", url);
+
+        ctx.render("urls/url.html");
+    };
+
+    public static Handler addCheck = ctx -> {
+        long id = ctx.pathParamAsClass("id", long.class).getOrDefault(null);
+        Url url = new QUrl()
+                .id.equalTo(id)
+                .findOne();
+
+        if (url == null) {
+            throw new NotFoundResponse("Url with id - " + id + " is not found in database!");
+        }
+
+        try {
+            HttpResponse<String> response = Unirest.get(url.getName()).asString();
+            Document parsedPage = Jsoup.parse(response.getBody());
+
+            int statusCode = response.getStatus();
+            String title = parsedPage.title();
+            String h1 = parsedPage.selectFirst("h1") == null
+                    ? "" : parsedPage.selectFirst("h1").text();
+            String description = parsedPage.selectFirst("meta[name=description]") == null
+                    ? "" : parsedPage.selectFirst("meta[name=description]").attr("content");
+
+            UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, url);
+            urlCheck.save();
+
+            ctx.sessionAttribute("flash", "Страница успешно проверена");
+            ctx.sessionAttribute("flash-type", "success");
+        } catch (UnirestException e) {
+            ctx.sessionAttribute("flash", "Проблемы с доступом к сайту, попробуйте в другой раз!");
+            ctx.sessionAttribute("flash-type", "danger");
+        } catch (Exception e) {
+            ctx.sessionAttribute("flash", e.getMessage());
+            ctx.sessionAttribute("flash-type", "danger");
+        }
+        ctx.redirect("/urls/" + id);
+    };
+
+    private static String transformUrl(URL parsedUrl) {
+        String protocol = parsedUrl.getProtocol();
+        String authority = parsedUrl.getAuthority();
+
+        return protocol + "://" + authority;
+    }
 }
