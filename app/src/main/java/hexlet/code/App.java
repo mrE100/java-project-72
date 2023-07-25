@@ -15,13 +15,29 @@ import static io.javalin.apibuilder.ApiBuilder.get;
 
 public final class App {
 
+    private static boolean isProduction() {
+        return getMode().equals("production");
+    }
+
+    private static String getMode() {
+        return System.getenv().getOrDefault("APP_ENV", "development");
+    }
+
     public static Javalin getApp() {
         Javalin app = Javalin.create(config -> {
-                    config.plugins.enableDevLogging();
-                    JavalinThymeleaf.init(getTemplateEngine()); })
-                .get("/", ctx -> ctx.render("index.html"))
-                .get("/url/", see)
-                .post("/url/", create);
+            if (!isProduction()) {
+                config.plugins.enableDevLogging();
+            }
+
+            JavalinThymeleaf.init(getTemplateEngine());
+        });
+
+        addRoutes(app);
+
+        app.before(ctx -> {
+            ctx.attribute("ctx", ctx);
+        });
+
         return app;
     }
 
@@ -50,7 +66,7 @@ public final class App {
     }
 
     private static void addRoutes(Javalin app) {
-        app.get("/", RootController.mainPage);
+        app.get("/", RootController.welcome);
 
         app.routes(() -> {
             path("urls", () -> {
