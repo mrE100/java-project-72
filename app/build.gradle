@@ -69,10 +69,13 @@ jacocoTestReport {
 }
 
 checkstyle {
-    toolVersion '10.0'
+  toolVersion '10.12.1'
 }
 
 task generateMigrations(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'hexlet.code.MigrationGenerator'
 }
+
+task stage(dependsOn: ['clean', 'installDist'])
+installDist.mustRunAfter clean
