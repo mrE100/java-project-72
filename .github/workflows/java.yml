@@ -10,14 +10,11 @@ on:
 
 jobs:
   build:
-  runs:
-    using: 'node16'
-    main: 'main.js'
-
+  
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.2.0
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
@@ -40,15 +37,12 @@ jobs:
 
   deploy:
     needs: build
-    runs:
-      using: 'node16'
-      main: 'main.js'
 
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.2.0
 
       - uses: docker/setup-buildx-action@v1
 
