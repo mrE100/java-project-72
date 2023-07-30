@@ -30,6 +30,7 @@ public final class App {
             }
 
             JavalinThymeleaf.init(getTemplateEngine());
+            config.staticFiles.enableWebjars();
         });
 
         addRoutes(app);

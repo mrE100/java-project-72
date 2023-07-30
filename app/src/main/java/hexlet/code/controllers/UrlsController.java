@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class UrlsController {
-    private static final String INPUT_URL_NULL = "inputUrl must not be null";
+    private static final String INPUT_URL_NULL = "inputUrl can't be null";
 
     public static Handler createUrl = ctx -> {
         String inputUrl = ctx.formParam("url");
@@ -37,8 +37,8 @@ public final class UrlsController {
             ctx.redirect("/");
             return;
         }
-        String normalizedUrl = transformUrl(parsedUrl);
 
+        String normalizedUrl = transformUrl(parsedUrl);
         Url checkedUrl = new QUrl()
                 .name.equalTo(normalizedUrl)
                 .findOne();
