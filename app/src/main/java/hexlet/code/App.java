@@ -7,7 +7,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import hexlet.code.controllers.RootController;
-import hexlet.code.controllers.UrlsController;
+import hexlet.code.controllers.URLController;
 
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
@@ -71,11 +71,11 @@ public final class App {
 
         app.routes(() -> {
             path("urls", () -> {
-                post(UrlsController.createUrl);
-                get(UrlsController.showAllAddedUrls);
+                get(URLController.showAllAddedUrls);
+                post(URLController.createUrl);
                 path("{id}", () -> {
-                    get(UrlsController.showUrl);
-                    path("checks", () -> post(UrlsController.addCheck));
+                    get(URLController.showUrl);
+                    path("checks", () -> post(URLController.addCheck));
                 });
             });
         });

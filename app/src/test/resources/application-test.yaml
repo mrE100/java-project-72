@@ -3,8 +3,8 @@ ebean:
     useDocker: false
     platform: h2
     ddlMode: dropCreate
-    dbName: test
+    dbName: development
     ddl:
       run: true
       generate: true
-      seedSql: seed-test-db.sql
+      seedSql: jdbc:h2:mem:myapp
