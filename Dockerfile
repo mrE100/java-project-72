@@ -15,3 +15,9 @@ RUN mv gradle-${GRADLE_VERSION} ${GRADLE_HOME}
 ENV PATH=$PATH:$GRADLE_HOME/bin
 
 WORKDIR /app
+
+COPY /app .
+
+RUN gradle installDist
+
+CMD ./build/install/java-project-72/bin/java-project-72
