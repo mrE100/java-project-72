@@ -14,8 +14,6 @@ import io.ebean.DB;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
-import org.junit.jupiter.api.*;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.MockResponse;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 public final class AppTest {
     private static final String PROJECT_TITLE = "Анализатор страниц";
