@@ -60,8 +60,11 @@ public final class URLController {
     };
 
     public static Handler showAllAddedUrls = ctx -> {
+        System.out.println("*********************");
         String term = ctx.queryParamAsClass("term", String.class).getOrDefault("");
+        System.out.println(term);
         int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1) - 1;
+        System.out.println(page);
         int rowsPerPage = 10;
 
         PagedList<Url> pagedUrls = new QUrl()
@@ -72,14 +75,17 @@ public final class URLController {
                 .id.asc()
                 .findPagedList();
         List<Url> urls = pagedUrls.getList();
+        System.out.println(urls);
 
         int lastPage = pagedUrls.getTotalPageCount() + 1;
         int currentPage = pagedUrls.getPageIndex() + 1;
+        System.out.println(currentPage);
         List<Integer> pages = IntStream
                 .range(1, lastPage)
                 .boxed()
                 .collect(Collectors.toList());
 
+        System.out.println(pages);
         ctx.attribute("term", term);
         ctx.attribute("urls", urls);
         ctx.attribute("currentPage", currentPage);
@@ -119,9 +125,9 @@ public final class URLController {
             int statusCode = response.getStatus();
             String title = parsedPage.title();
             String h1 = parsedPage.selectFirst("h1") == null
-                    ? "" : parsedPage.selectFirst("h1").text();
+                    ? null : parsedPage.selectFirst("h1").text();
             String description = parsedPage.selectFirst("meta[name=description]") == null
-                    ? "" : parsedPage.selectFirst("meta[name=description]").attr("content");
+                    ? null : parsedPage.selectFirst("meta[name=description]").attr("content");
 
             UrlCheck urlCheck = new UrlCheck(statusCode, title, h1, description, url);
             urlCheck.save();
@@ -141,7 +147,12 @@ public final class URLController {
     private static String transformUrl(URL parsedUrl) {
         String protocol = parsedUrl.getProtocol().toLowerCase();
         String authority = parsedUrl.getAuthority().toLowerCase();
+        int port = parsedUrl.getPort();
 
-        return protocol + "://" + authority;
+        return String.format("%s://%s%s",
+                        protocol,
+                        authority,
+                        port == -1 ? "" : ":" + port)
+                .toLowerCase();
     }
 }

@@ -80,12 +80,10 @@ do
     esac
 done
 
-APP_HOME=$( cd "${APP_HOME:-./}" && pwd -P ) || exit
-
-APP_NAME="Gradle"
+# This is normally unused
+# shellcheck disable=SC2034
 APP_BASE_NAME=${0##*/}
-
-DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+APP_HOME=$( cd "${APP_HOME:-./}" && pwd -P ) || exit
 
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD=maximum
