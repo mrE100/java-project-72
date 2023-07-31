@@ -24,6 +24,7 @@ jobs:
         with:
           gradle-version: 8.2.1
           arguments: build
+          build-root-directory: app
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v3.2.0
         env:
