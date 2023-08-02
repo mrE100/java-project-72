@@ -18,6 +18,7 @@ import org.jsoup.nodes.Document;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public final class URLController {
         URL parsedUrl;
 
         try {
-            parsedUrl = new URI(Objects.requireNonNull(inputUrl, INPUT_URL_NULL)).toUrl();
+            parsedUrl = new URI(Objects.requireNonNull(inputUrl, INPUT_URL_NULL)).toURL();
         } catch (MalformedURLException e) {
             ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flash-type", "danger");
