@@ -5,6 +5,7 @@ plugins {
     id 'io.ebean' version '13.20.1'
     id 'se.patrikerdes.use-latest-versions' version '0.2.18'
     id 'jacoco'
+    id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 group = 'hexlet.code'
@@ -62,13 +63,17 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
+}
+
+testlogger {
+  showStandardStreams true
 }
 
 jacocoTestReport {
-    reports {
-        xml.required = true
-    }
+  reports {
+    xml.required = true
+  }
 }
 
 checkstyle {
