@@ -17,7 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public final class URLController {
         URL parsedUrl;
 
         try {
-            parsedUrl = new URL(Objects.requireNonNull(inputUrl, INPUT_URL_NULL));
+            parsedUrl = new URI(Objects.requireNonNull(inputUrl, INPUT_URL_NULL)).toUrl();
         } catch (MalformedURLException e) {
             ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flash-type", "danger");
@@ -60,11 +60,8 @@ public final class URLController {
     };
 
     public static Handler showAllAddedUrls = ctx -> {
-        System.out.println("*********************");
         String term = ctx.queryParamAsClass("term", String.class).getOrDefault("");
-        System.out.println(term);
         int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1) - 1;
-        System.out.println(page);
         int rowsPerPage = 10;
 
         PagedList<Url> pagedUrls = new QUrl()
@@ -75,17 +72,13 @@ public final class URLController {
                 .id.asc()
                 .findPagedList();
         List<Url> urls = pagedUrls.getList();
-        System.out.println(urls);
 
         int lastPage = pagedUrls.getTotalPageCount() + 1;
         int currentPage = pagedUrls.getPageIndex() + 1;
-        System.out.println(currentPage);
         List<Integer> pages = IntStream
                 .range(1, lastPage)
                 .boxed()
                 .collect(Collectors.toList());
-
-        System.out.println(pages);
         ctx.attribute("term", term);
         ctx.attribute("urls", urls);
         ctx.attribute("currentPage", currentPage);
