@@ -48,7 +48,7 @@ public final class URLController {
         if (checkedUrl != null) {
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "info");
-            ctx.redirect("/urls");
+            ctx.redirect("/");
             return;
         }
         Url url = new Url(normalizedUrl);
@@ -139,14 +139,12 @@ public final class URLController {
     };
 
     private static String transformUrl(URL parsedUrl) {
-        String protocol = parsedUrl.getProtocol().toLowerCase();
-        String authority = parsedUrl.getAuthority().toLowerCase();
+        String protocol = parsedUrl.getProtocol();
+        String authority = parsedUrl.getAuthority();
         int port = parsedUrl.getPort();
 
-        return String.format("%s://%s%s",
+        return String.format("%s://%s",
                         protocol,
-                        authority,
-                        port == -1 ? "" : ":" + port)
-                .toLowerCase();
+                        authority);
     }
 }

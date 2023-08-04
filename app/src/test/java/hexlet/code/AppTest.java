@@ -111,7 +111,7 @@ public final class AppTest {
         HttpResponse<String> checkAddedUrlResponse = Unirest
                 .get(baseUrl + "/urls/" + addedUrlFromDB.getId()).asString();
 
-//        assertThat(addUrlResponse.getStatus()).isEqualTo(302);
+        assertThat(addUrlResponse.getStatus()).isEqualTo(302);
         assertThat(addedUrlFromDB).isNotNull();
         assertThat(checkAddedUrlResponse.getStatus()).isEqualTo(200);
         assertThat(checkAddedUrlResponse.getBody()).contains(URL_EXAMPLE);
@@ -122,7 +122,7 @@ public final class AppTest {
                 .name.equalTo(URL_EXAMPLE)
                 .findList();
 
-//        assertThat(repeatAddUrlResponse.getStatus()).isEqualTo(302);
+        assertThat(repeatAddUrlResponse.getStatus()).isEqualTo(302);
         assertThat(addedUrlsFromDB.size() == 1).isTrue();
     }
 
@@ -142,19 +142,19 @@ public final class AppTest {
         HttpResponse<String> urlsResponse = Unirest.get(baseUrl + "/urls").asString();
         HttpResponse<String> urlResponse = Unirest.get(baseUrl + "/urls/" + idToAddNewCheck).asString();
 
-//        assertThat(addUrlResponse.getStatus()).isEqualTo(302);
-//        assertThat(addCheckResponse.getStatus()).isEqualTo(302);
+        assertThat(addUrlResponse.getStatus()).isEqualTo(302);
+        assertThat(addCheckResponse.getStatus()).isEqualTo(302);
         assertThat(urlsResponse.getStatus()).isEqualTo(200);
         assertThat(urlResponse.getStatus()).isEqualTo(200);
 
-//        assertThat(urlsResponse.getBody()).contains(url.substring(0, url.length() - 1));
-//        assertThat(urlResponse.getBody()).contains(TEST_FILE_TITLE);
-//        assertThat(urlResponse.getBody()).contains(TEST_FILE_H_1);
-//        assertThat(urlResponse.getBody()).contains(TEST_FILE_DESCRIPTION);
-//
-//        List<UrlCheck> addedChecksFromDB = new QUrlCheck()
-//                .title.equalTo(TEST_FILE_TITLE)
-//                .findList();
-//        assertThat(addedChecksFromDB.size() == 1).isTrue();
+        assertThat(urlsResponse.getBody()).contains(url.substring(0, url.length() - 1));
+        assertThat(urlResponse.getBody()).contains(TEST_FILE_TITLE);
+        assertThat(urlResponse.getBody()).contains(TEST_FILE_H_1);
+        assertThat(urlResponse.getBody()).contains(TEST_FILE_DESCRIPTION);
+
+        List<UrlCheck> addedChecksFromDB = new QUrlCheck()
+                .title.equalTo(TEST_FILE_TITLE)
+                .findList();
+        assertThat(addedChecksFromDB.size() == 1).isTrue();
     }
 }

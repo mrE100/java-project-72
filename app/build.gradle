@@ -58,7 +58,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'io.ebean:ebean-test:13.20.1'
-    testImplementation 'com.konghq:unirest-java:4.0.0-RC2'
+    testImplementation 'com.konghq:unirest-java:3.14.2'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
 }
 
