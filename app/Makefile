@@ -1,7 +1,6 @@
 setup:
 	gradle wrapper --gradle-version 8.2
 
-
 clean:
 	./gradlew clean
 
@@ -15,7 +14,7 @@ install:
 	./gradlew install
 
 start-dist:
-	APP_ENV=production ./build/install/java-project-72/bin/java-project-72
+	APP_ENV=production ./build/install/java-javalin-blog/bin/java-javalin-blog
 
 generate-migrations:
 	./gradlew generateMigrations
@@ -33,9 +32,9 @@ check-updates:
 	./gradlew dependencyUpdates
 
 image-build:
-	docker build -t hexletcomponents/java-project-72:latest .
+	docker build -t hexletcomponents/java-javalin-blog:latest .
 
 image-push:
-	docker push hexletcomponents/java-project-72:latest
+	docker push hexletcomponents/java-javalin-blog:latest
 
 .PHONY: build
