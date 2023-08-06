@@ -1,4 +1,6 @@
-.DEFAULT_GOAL := build-run
+setup:
+	gradle wrapper --gradle-version 8.2
+
 
 clean:
 	./gradlew clean
@@ -6,14 +8,20 @@ clean:
 build:
 	./gradlew clean build
 
+start:
+	APP_ENV=development ./gradlew run
+
 install:
-	./gradlew clean install
+	./gradlew install
 
-run-dist:
-	./build/install/java-package/bin/java-package
+start-dist:
+	APP_ENV=production ./build/install/java-project-72/bin/java-project-72
 
-run:
-	./gradlew run
+generate-migrations:
+	./gradlew generateMigrations
+
+lint:
+	./gradlew checkstyleMain checkstyleTest
 
 test:
 	./gradlew test
@@ -21,13 +29,13 @@ test:
 report:
 	./gradlew jacocoTestReport
 
-lint:
-	./gradlew checkstyleMain checkstyleTest
+check-updates:
+	./gradlew dependencyUpdates
 
-update-deps:
-	./gradlew useLatestVersions
+image-build:
+	docker build -t hexletcomponents/java-project-72:latest .
 
-
-build-run: build run
+image-push:
+	docker push hexletcomponents/java-project-72:latest
 
 .PHONY: build
