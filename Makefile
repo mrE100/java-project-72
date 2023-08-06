@@ -1,6 +1,4 @@
-setup:
-	gradle wrapper --gradle-version 7.4.2
-
+.DEFAULT_GOAL := build-run
 
 clean:
 	./gradlew clean
@@ -8,20 +6,14 @@ clean:
 build:
 	./gradlew clean build
 
-start:
-	APP_ENV=development ./gradlew run
-
 install:
-	./gradlew install
+	./gradlew clean install
 
-start-dist:
-	APP_ENV=production ./build/install/java-project-72/bin/java-project-72
+run-dist:
+	./build/install/java-package/bin/java-package
 
-generate-migrations:
-	./gradlew generateMigrations
-
-lint:
-	./gradlew checkstyleMain checkstyleTest
+run:
+	./gradlew run
 
 test:
 	./gradlew test
@@ -29,13 +21,13 @@ test:
 report:
 	./gradlew jacocoTestReport
 
-check-updates:
-	./gradlew dependencyUpdates
+lint:
+	./gradlew checkstyleMain checkstyleTest
 
-image-build:
-	docker build -t hexletcomponents/java-project-72:latest .
+update-deps:
+	./gradlew useLatestVersions
 
-image-push:
-	docker push hexletcomponents/java-project-72:latest
+
+build-run: build run
 
 .PHONY: build
