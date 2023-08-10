@@ -32,9 +32,9 @@ check-updates:
 	make -C app check-updates
 
 image-build:
-	docker build -t hexletcomponents/java-project-72:latest .
+	docker build -t hexletcomponents/java-javalin-blog:latest .
 
 image-push:
-	docker push hexletcomponents/java-project-72:latest
+	docker push hexletcomponents/java-javalin-blog:latest
 
 .PHONY: build
