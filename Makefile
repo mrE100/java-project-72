@@ -14,7 +14,7 @@ install:
 	./gradlew install
 
 start-dist:
-	APP_ENV=production ./build/install/app/bin/app
+	APP_ENV=production ./build/install/java-javalin-blog/bin/java-javalin-blog
 
 generate-migrations:
 	./gradlew generateMigrations
@@ -32,9 +32,9 @@ check-updates:
 	./gradlew dependencyUpdates
 
 image-build:
-	docker build -t hexletcomponents/app:latest .
+	docker build -t hexletcomponents/java-javalin-blog:latest .
 
 image-push:
-	docker push hexletcomponents/app:latest
+	docker push hexletcomponents/java-javalin-blog:latest
 
 .PHONY: build
